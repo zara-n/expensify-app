@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render Help Page correctly 1`] = `
+<div>
+  This is from my help page
+</div>
+`;
