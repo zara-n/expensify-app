@@ -482,3 +482,98 @@ export default (timestamp = 0) => {
 read documentation of module you want to mock (to avoid stack trace errors, calling the module within the mock will look for the mock module just declared, hence the requireActual("moment") above)
 
 JEST WILL AUTOMATICALLY CALL THE MOCK MODULE IF IT IS DIRECTLY ADJACENT TO ITS CORRESPONDING MODULE, otherwise you must manually put it in. 
+
+OPTIMISING FOR PRODUCTION
+Running webpack in production mode (can be found in webpack documentation)
+Allows us to minify our JS code, with -p flag
+sourcemap makes the project bigger / more memory
+
+in package.json update:
+
+   "build:dev": "webpack",
+    "build:prod": "webpack -p",
+
+changing WEBPACK CONFIG, depending on if it is running in production of developer mode:
+changing module.export from exporting an object directly TO epxporting a function (which returns a the webpack config object when called)
+
+-allows the exporting function to be called with some things (e.g. ENV (environment))
+
+module.exports = (env) => {
+  return {
+      ...
+  }
+
+instead of
+  module.exports = {
+    ...
+};
+
+change package.json file to 
+"build:prod": "webpack -p --env production", --- allows us to see if we are in production or not
+it gives the env the value of "production" in webpack.config
+
+CHANGE (in webpack config)
+devtool: "cheap-module-eval-source-map", 
+
+TO
+devtool: isProduction ? 'source-map' : "cheap-module-eval-source-map", 
+//the above "source-map" is slow to build and is better suited for production, going to create an external file which will only open when someone opens dev tools
+
+
+SEPERATING CSS FILES IN BUILD
+
+DOCS FOR PLUGIN WE WILL BE USING:
+extract-text-webpack-plugin
+
+yarn add extract-text-webpack-plugin@3.0.0
+npm i extract-text-webpack-plugin@3.0.0
+
+add the require to webpack config, for the plugin
+
+const ExtractTextplugin = require("extract-text-webpack-plugin");
+
+in module exports, within the webpack config, create a new instance of the plugin
+const CSSExtract = new ExtractTextplugin("styles.css"); //name of the file we want the css to be extracted to
+
+Change the rules to the following, and redefine "use":
+{
+          test: /\.s?css$/,
+          use: CSSExtract.extract({
+            use: ["css-loader", "sass-loader"]
+          })
+}
+
+Pass the CSSExtract value to the plugins area:
+
+    plugins: [
+      CSSExtract
+    ], 
+
+
+TO ENSURE THE STYLES GET LOADED TO THE PROJECT, edit index.html and add:
+<link rel="stylesheet" type="text/css" href="/styles.css"/>
+
+
+SOURCEMAP CHANGE FOR DEVELOPMENT:
+devtool: isProduction ? "source-map" : "inline-source-map", //inline one is more ideal for dev, it is slower however, subject to opinion and change
+
+ENABLE SOURCEMAP FOR THE CSS & SASS LOADER:
+css-loader, and sass-loader sourcemap options for webpack can be found in webpack documentation. 
+By default the sourcemaps are disabled by default, to enable for friendlier development build, change "use" in webpack config as below:
+
+          use: CSSExtract.extract({
+            use: [
+              {
+                loader: "css-loader",
+                option: {
+                  sourceMap: true
+                }
+              },
+              {
+                loader: "sass-loader",
+                options: {
+                  sourceMap: true
+                }
+              }
+            ]
+          })
