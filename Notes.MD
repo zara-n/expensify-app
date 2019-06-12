@@ -635,3 +635,10 @@ public/bundle.js
 public/bundle.js.map
 public/styles.css
 public/styles.css.map
+
+
+git push heroku push master //to push to heroku 
+
+heroku open
+
+(https://expensify-zara.herokuapp.com/)
