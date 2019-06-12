@@ -577,3 +577,61 @@ By default the sourcemaps are disabled by default, to enable for friendlier deve
               }
             ]
           })
+
+CREATING EXPRESS SERVER
+Create new file/folder in root of the project
+"Server.js" (within a server folder)
+
+expressjs.com for documentation 
+
+e.g.
+yarn add express@4.15.4
+npm i express@4.15.4
+
+RUNNING SERVER:
+node server/server.js
+
+
+
+HEROKU
+After making free account
+
+Install CLI
+https://devcenter.heroku.com/articles/heroku-cli
+
+check if installed: heroku --version
+
+heroku login
+
+heroku create -name- //or whatever name
+
+creates a heroku remote to git, so we can deploy
+check with git remove (-v for verbose version)
+
+We need to tell Heroku how to run our Node server
+add to package.json, to the list of scripts
+
+ "start": "node server/server.js"
+
+ Then server.js listen/output cannot be a static one
+ Heroku provides a environment variable:
+
+const port = process.env.PORT || 3000; //if port not found, then use static
+
+app.listen(port, ()=>{
+    console.log("Express server running ")
+}); //port express is going to use
+
+Teaching Heroku to run webpack:
+Add to package.json scripts:
+
+    "heroku-postbuild": "yarn run build:prod" //our webpack production mode command
+
+
+Add to .gitignore (at root folder):
+
+node_modules/
+public/bundle.js
+public/bundle.js.map
+public/styles.css
+public/styles.css.map
