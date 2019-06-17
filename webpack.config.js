@@ -12,7 +12,7 @@ module.exports = env => {
     //is a node thing, a way to expose something to another file
     entry: "./src/app.js", //where it should start
     output: {
-      path: path.join(__dirname, "public"), //the absolute path where we want to put our bundle file, not allowed to use "./"
+      path: path.join(__dirname, "public", "dist"), //the absolute path where we want to put our bundle file, not allowed to use "./"
       filename: "bundle.js"
     },
     module: {
@@ -48,7 +48,8 @@ module.exports = env => {
     devtool: isProduction ? "source-map" : "inline-source-map",
     devServer: {
       contentBase: path.join(__dirname, "public"),
-      historyApiFallback: true
+      historyApiFallback: true,
+      publicPath: "/dist/"
     }
   };
 };

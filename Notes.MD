@@ -642,3 +642,39 @@ git push heroku push master //to push to heroku
 heroku open
 
 (https://expensify-zara.herokuapp.com/)
+
+Heroku doesn't use all our dependencies (e.g. local ones such as our testing suites)
+
+"--dev" at the end of commands
+Dev Dependencies
+
+  "devDependencies": {
+    "enzyme": "3.0.0",
+    "enzyme-adapter-react-16": "1.0.0",
+    "enzyme-to-json": "3.0.1"
+  }
+
+Seperate dist folder in public folder, to put our compiled files
+Update where file directories being used: e.g.:
+    <script src="/dist/bundle.js"></script>
+
+Update Webpack config:
+
+output: {
+      path: path.join(__dirname, "public", "dist"), //the absolute path where we want to put our bundle file, not allowed to use "./"
+      filename: "bundle.js"
+    },
+
+Add to  the devServer within Webpack config (look at docs for devServer / public path for more info)
+
+     publicPath: "/dist/"
+
+
+NUMERAL JS
+A js library to format number values, e.g. currency
+Similar to moment, but for numbers
+e.g 12000000 -> 1.2 mil
+
+yarn add numeral@2.0.6
+
+import numeral from "numeral"
