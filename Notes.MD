@@ -780,10 +780,11 @@ then firebase.js config needs to be updated to reflect those variables
 const config = {
   apiKey: process.env.FIREBASE_API_KEY,
   authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.FIREBASE_DATABASE_URL,
-  storageBucket: process.env.FIREBASE_PROJECT_ID,
-  messagingSenderId: process.env.FIREBASE_STORAGE_BUCKET,
-  appId: process.env.FIREBASE_MESSENGING_SENDER_ID
+  databaseURL: process.env.FIREBASE_DATABASE_URL,
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.FIREBASE_MESSENGING_SENDER_ID,
+  appId: process.env.FIREBASE_APP_ID
 };
 
 Then setupTests.js is updated (file created by setting up enzyme for react 16) by adding the following lines:
