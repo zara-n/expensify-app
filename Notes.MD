@@ -637,7 +637,7 @@ public/styles.css
 public/styles.css.map
 
 
-git push heroku push master //to push to heroku 
+git push heroku master //to push to heroku 
 
 heroku open
 
@@ -678,3 +678,133 @@ e.g 12000000 -> 1.2 mil
 yarn add numeral@2.0.6
 
 import numeral from "numeral"
+
+
+ADDING FIREBASE // Realtime Database
+
+firebase.google.com
+
+follow instructions (create project -> realtime firebase -> web app)
+
+Adding firebase to yoru app:
+
+e.g.
+yarn add firebase@4.2.0
+npm i firebase@4.2.0
+
+creating folder in src folder: "firebase"
+creating file in firebase folder: "firebase.js"
+
+
+REDUX THUNK - redux middleware
+yarn add redux-thunk@2.2.0
+npm i redux-thunk@2.2.0
+
+add "applyMiddleware" to redux import in configureStore
+
+import { createStore, combineReducers, applyMiddleware } from "redux";
+
+&
+import thunk from "redux-thunk";
+
+Allows for startAddExpense (look at expenses.js) to return a function
+
+
+TESTING REDUX / ASYNC REDUX ACTIONS
+
+MOCK STORE
+module: redux-mock-store
+docs - https://github.com/dmitry-zaets/redux-mock-store
+
+yarn add redux-mock-store@1.2.3
+npm i redux-mock-store@1.2.3
+
+import configureMockStore from "redux-mock-store"
+
+//supports the same API that a regular redux store does
+
+Environment variable, to see what environment the application is in (production, development, testing etc), there is no cross OS way of doing it without downloading an NPM package: cross-env
+
+e.g.
+ yarn add --dev cross-env@5.0.5 // dev because we are only adding to our development 
+ npm install --save-dev cross-envv@5.0.5
+
+
+Integrating to our package.json test SCRIPT, add "cross-env NODE_ENV=test" in front:
+
+"test": "cross-env NODE_ENV=test  jest --config=jest.config.json",
+
+Production environment variable is provided by Heroku.
+Development environment variable is missing, so we know the one without it is in Development.
+
+To then take advantage of our new variable, we add the following to webpack.config.js:
+
+process.env.NODE_ENV == process.env.NODE_ENV || "development"; //if none found then it is in development mode
+
+Making two seperate files, one for test & dev (excluded from git repo)
+.env.test
+.env.development
+
+
+NPM dotenv - reads environment files (.env)
+
+e.g. yarn add --dev dotenv@4.0.0
+
+RESULT:
+
+if (process.env.NODE_ENV === "test") {
+  require('dotenv').config({ path: '.env.test'});
+} else if (process.env.NODE_ENV === "development") {
+  require('dotenv').config({ path: '.env.development'});
+} 
+
+
+Node environment variables (in our webpack config) are not sent to our client side due to security risks, where private environment variables being exposed. 
+
+They need to be manually passed down to our client side javascript.
+
+webpack has inbuilt plugin for that:
+In webpack config import webpack: const webpack = require("webpack");
+Add to "plugins":
+
+new webpack.DefinePlugin({
+        "process.env.FIREBASE_API_KEY": JSON.stringify(process.env.FIREBASE_API_KEY),
+        ---
+        ---
+})
+one for each value needed to be passed down
+
+
+then firebase.js config needs to be updated to reflect those variables
+
+const config = {
+  apiKey: process.env.FIREBASE_API_KEY,
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.FIREBASE_DATABASE_URL,
+  storageBucket: process.env.FIREBASE_PROJECT_ID,
+  messagingSenderId: process.env.FIREBASE_STORAGE_BUCKET,
+  appId: process.env.FIREBASE_MESSENGING_SENDER_ID
+};
+
+Then setupTests.js is updated (file created by setting up enzyme for react 16) by adding the following lines:
+
+import DotEnv from 'dotenv'
+DotEnv.config({ path: '.env.test'});
+
+Heroku Config
+The above env variables need to be used in Production (which needs to be done in HEROKU)
+Heroku automatically sets node_env to "production"
+But the variables need to be set.
+
+Setting it from .env.development
+
+COMMAND LINE
+heroku config:set KEY=value
+heroku config:unset KEY
+heroku config (too see all set key value pairs)
+
+heroku config:set FIREBASE_API_KEY=AIzaSyDvB2Y53Z7sPbnA8nLJHIDBzeB0JjBkOiE FIREBASE_AUTH_DOMAIN=expensify-3e7cc.firebaseapp.com FIREBASE_DATABASE_URL=https://expensify-3e7cc.firebaseio.com FIREBASE_PROJECT_ID=expensify-3e7cc FIREBASE_STORAGE_BUCKET=expensify-3e7cc.appspot.com FIREBASE_MESSENGING_SENDER_ID=236142290934 FIREBASE_APP_ID=1:236142290934:web:2ee9965b02c89b6b
+
+add the .env files to .gitignore:
+.env.test
+.env.development
