@@ -3,13 +3,13 @@ const path = require("path"); //built in node function
 const webpack = require("webpack");
 const ExtractTextplugin = require("extract-text-webpack-plugin");
 
-process.env.NODE_ENV == process.env.NODE_ENV || "development"; //environment variable, stores the environment you're currently in
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';; //environment variable, stores the environment you're currently in
 
-if (process.env.NODE_ENV === "test") {
-  require('dotenv').config({ path: '.env.test'});
-} else if (process.env.NODE_ENV === "development") {
-  require('dotenv').config({ path: '.env.development'});
-} 
+if (process.env.NODE_ENV === 'test') {
+  require('dotenv').config({ path: '.env.test' });
+} else if (process.env.NODE_ENV === 'development') {
+  require('dotenv').config({ path: '.env.development' });
+}
 
 //console.log(path.join(__dirname, 'public')); //(__dirname) provides the path to the current location
 
