@@ -2,6 +2,7 @@ import {
   startAddExpense,
   addExpense,
   editExpense,
+  startRemoveExpense,
   removeExpense,
   setExpenses,
   startSetExpenses
@@ -121,9 +122,9 @@ test("should setup set expense action object with data", () => {
   });
 });
 
-test("should fetch the expenses from firebase", (done) => {
+test("should fetch the expenses from firebase", done => {
   const store = createMockStore({});
-  store.dispatch(startSetExpenses()).then(()=>{
+  store.dispatch(startSetExpenses()).then(() => {
     const actions = store.getActions();
     expect(actions[0]).toEqual({
       type: "SET_EXPENSES",
@@ -131,6 +132,26 @@ test("should fetch the expenses from firebase", (done) => {
     });
     done();
   });
+});
+
+test("should remove an expense from firebase", done => {
+  const store = createMockStore({});
+  const id = expenses[2].id;
+  store
+    .dispatch(startRemoveExpense({ id }))
+    .then(() => {
+      const actions = store.getActions();
+      expect(actions[0]).toEqual({
+        type: "REMOVE_EXPENSE",
+        id
+      });
+      return database.ref(`expenses/${id}`).once("value"); //returning promise so it can be chained on
+    })
+    .then(snapshot => {
+      //when you use snapshot.val on a item that doesn't exist, you get NULL back
+      expect(snapshot.val()).toBeFalsy();
+      done();
+    });
 });
 
 // test("should set up add expense action object with default values", () => {
