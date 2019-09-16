@@ -2,6 +2,7 @@ import {
   startAddExpense,
   addExpense,
   editExpense,
+  startEditExpense,
   startRemoveExpense,
   removeExpense,
   setExpenses,
@@ -33,6 +34,27 @@ test("should setup remove expense action object", () => {
   });
 });
 
+test("should remove an expense from firebase", done => {
+  const store = createMockStore({});
+  const id = expenses[2].id;
+  store
+    .dispatch(startRemoveExpense({ id }))
+    .then(() => {
+      const actions = store.getActions();
+      expect(actions[0]).toEqual({
+        type: "REMOVE_EXPENSE",
+        id
+      });
+      return database.ref(`expenses/${id}`).once("value"); //returning promise so it can be chained on
+    })
+    .then(snapshot => {
+      //when you use snapshot.val on a item that doesn't exist, you get NULL back
+      expect(snapshot.val()).toBeFalsy();
+      done();
+    });
+});
+
+
 test("should set up edit expense action object", () => {
   const action = editExpense("123abc", { description: "rent" });
   expect(action).toEqual({
@@ -43,6 +65,31 @@ test("should set up edit expense action object", () => {
     }
   });
 });
+
+test("should edit an expense from firebase", done => {
+  const store = createMockStore({});
+  const id = expenses[2].id
+  const updates = {
+    description: "AMEX"
+  }
+  store
+    .dispatch(startEditExpense(id, updates))
+    .then(() => {
+      const actions = store.getActions();
+      expect(actions[0]).toEqual({
+        type: "EDIT_EXPENSE",
+        id,
+        updates
+      });
+      return database.ref(`expenses/${id}`).once("value"); //returning promise so it can be chained on
+    })
+    .then(snapshot => {
+      //when you use snapshot.val on a item that doesn't exist, you get NULL back
+      expect(snapshot.val().description).toBe("AMEX");
+      done();
+    });
+});
+
 
 test("should set up add expense action object with provided values", () => {
   const action = addExpense(expenses[2]);
@@ -134,25 +181,6 @@ test("should fetch the expenses from firebase", done => {
   });
 });
 
-test("should remove an expense from firebase", done => {
-  const store = createMockStore({});
-  const id = expenses[2].id;
-  store
-    .dispatch(startRemoveExpense({ id }))
-    .then(() => {
-      const actions = store.getActions();
-      expect(actions[0]).toEqual({
-        type: "REMOVE_EXPENSE",
-        id
-      });
-      return database.ref(`expenses/${id}`).once("value"); //returning promise so it can be chained on
-    })
-    .then(snapshot => {
-      //when you use snapshot.val on a item that doesn't exist, you get NULL back
-      expect(snapshot.val()).toBeFalsy();
-      done();
-    });
-});
 
 // test("should set up add expense action object with default values", () => {
 //   const action = addExpense();
