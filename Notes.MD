@@ -862,3 +862,25 @@ import AppRouter, { history } from "./routers/AppRouter";
 
 NEW REDUCER FOR AUTH necessary for more in depth authorisation
 auth.js
+
+
+MAKE FIRBASE DATABASE PRIVATE
+
+https://firebase.google.com/docs/storage/security/user-security
+
+In RULES of database:
+
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+      "users":{
+        "$user_id": {
+          ".read": "$user_id === auth.uid",
+          ".write": "$user_id === auth.uid"
+        }
+      }
+  }
+}
+
+Can be tested in simulator
