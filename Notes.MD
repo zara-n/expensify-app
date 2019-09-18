@@ -884,3 +884,48 @@ In RULES of database:
 }
 
 Can be tested in simulator
+
+DATA VALIDATION SERVER SIDE: //in firebase rules
+
+firebase database security/validation rule:
+https://firebase.google.com/docs/reference/security/database
+
+EXAMPLE:
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "users": {
+      "$user_id": {
+        ".read": "$user_id === auth.uid",
+        ".write": "$user_id === auth.uid",
+        "expenses": {
+          "$expense_id": {
+            ".validate":
+              "newData.hasChildren(['description', 'note', 'amount', 'createdAt'])",
+            "description": {
+              ".validate": "newData.isString() && newData.val().length > 0"
+            },
+            "note": {
+              ".validate": "newData.isString()"
+            },
+            "amount": {
+              ".validate": "newData.isNumber()"
+            },
+            "createdAt": {
+              ".validate": "newData.isNumber()"
+            },
+            "$other": {
+              ".validate": false
+            }
+          }
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    }
+  }
+}
+
+
