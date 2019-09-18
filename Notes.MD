@@ -809,3 +809,56 @@ heroku config:set FIREBASE_API_KEY=AIzaSyDvB2Y53Z7sPbnA8nLJHIDBzeB0JjBkOiE FIREB
 add the .env files to .gitignore:
 .env.test
 .env.development
+
+
+
+GOOGLE AUTHENTICATION
+go to Firebase console, authentication and enable google.
+
+Setting up functionality to authentication
+inside firebase.js we need an instance of a "Provider" -  provides authentication.
+
+We need a Google Provider, in firebase.js:
+const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
+
+export { firebase, googleAuthProvider, database as default }; //exporting it as a named export
+
+
+One would use GitHub auth for github, facebook auth for facebook and so on and so forth
+
+DOCUMENTATION: https://firebase.google.com/docs/auth/web/google-signin
+
+
+Then in app.js
+
+import {firebase} from './firebase/firebase'; 
+
+firebase.auth().onAuthStateChanged(()=>{
+
+});
+
+Instead of making a firebase call directly inside of a Login Page, better to make a new actions file:
+
+create auth.js in actions folder - inside of here we will make firebase calls
+
+NPM HISTORY
+React Router uses this, however in some cases we need to use it manually (outside of component scopes).
+
+npm install history@4.7.2 
+yarn add history@4.7.2 
+
+in AppRouter.js
+
+import createHistory from "history/createBrowserHistory";
+import { Router, Route, Switch } from "react-router-dom";
+
+export const history = createHistory();
+
+Replace <BrowserRouter> //uses history by default, built in
+With <Router > //we pass history in, and can provide our own history value, custom history
+
+And now we can use it in app.js
+import AppRouter, { history } from "./routers/AppRouter";
+
+NEW REDUCER FOR AUTH necessary for more in depth authorisation
+auth.js
