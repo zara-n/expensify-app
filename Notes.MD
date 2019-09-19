@@ -928,4 +928,28 @@ EXAMPLE:
   }
 }
 
+FINAL FIREBASE AUTHORISATION
+
+Any domains that need access to the database must be added to the Authorized Domains list in the firebase console.
+
+E.g. Heroku hosted website
+https://expensify-zara.herokuapp.com
+
+BABEL POLYFILL
+
+Fixes stuff that babel did not transpile for browsers that cannot support said stuff
+
+EXAMPLE:
+
+[].include("String") // old browsers (like ie 11) do not support this
+
+npm install --save babel-polyfill@6.26.0
+yarn add babel-polyfill@6.26.0
+
+UPDATE webpack.config.js file
+
+add "babel-polyfill" to "entry"
+
+You can have an array of strings under "entry":
+    entry: ["babel-polyfill", "./src/app.js"]
 

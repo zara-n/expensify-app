@@ -1,21 +1,26 @@
+* {
+  box-sizing: border-box; //controls the way width & height work (e.g. includes padding, doesn't add it)
+}
+
 html {
-    font-size: 62.5%;// (based on 16px based system = 10px);
+  font-size: 62.5%; // (based on 16px based system = 10px);
 }
 
 body {
-
-    font-family: Helvetica, Arial, sans-serif;
-    font-size: $m-size;
+  color: $dark-grey;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: $m-size;
+  line-height: 1.6;
 }
 
 button {
-    cursor: pointer;
+  cursor: pointer;
 }
 
-button:disabled{
-    cursor: default;
+button:disabled {
+  cursor: default;
 }
 
 .is-active {
-    font-weight: bold;
+  font-weight: bold;
 }
