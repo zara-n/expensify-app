@@ -804,7 +804,7 @@ heroku config:set KEY=value
 heroku config:unset KEY
 heroku config (too see all set key value pairs)
 
-heroku config:set FIREBASE_API_KEY=AIzaSyDvB2Y53Z7sPbnA8nLJHIDBzeB0JjBkOiE FIREBASE_AUTH_DOMAIN=expensify-3e7cc.firebaseapp.com FIREBASE_DATABASE_URL=https://expensify-3e7cc.firebaseio.com FIREBASE_PROJECT_ID=expensify-3e7cc FIREBASE_STORAGE_BUCKET=expensify-3e7cc.appspot.com FIREBASE_MESSENGING_SENDER_ID=236142290934 FIREBASE_APP_ID=1:236142290934:web:2ee9965b02c89b6b
+heroku config:set FIREBASE_API_KEY="" FIREBASE_AUTH_DOMAIN="" FIREBASE_DATABASE_URL=https://expensify-3e7cc.firebaseio.com FIREBASE_PROJECT_ID=expensify-3e7cc FIREBASE_STORAGE_BUCKET=expensify-3e7cc.appspot.com FIREBASE_MESSENGING_SENDER_ID=236142290934 FIREBASE_APP_ID=1:236142290934:web:2ee9965b02c89b6b
 
 add the .env files to .gitignore:
 .env.test
